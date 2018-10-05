@@ -20,19 +20,36 @@
         var A0s;
         var chart;
 
-        function autoChart() {
-
-            setInterval(()=>{
-                updateChart();
-            }, 1000);
-
+        function getIp() {
+            return document.getElementById("ip").value;
 
         }
 
+        function onOffChart() {
+            if (document.getElementById('onOff').value == "Start") {
+                document.getElementById('onOff').value = "Stop";
+                timer = setInterval(
+                    () => {
+                        updateChart();
+                    },
+                    1000);
+            } else {
+                document.getElementById('onOff').value = "Start";
+                clearInterval(timer);
+            }
+        }
+
+        function autoChart() {
+            setInterval(
+                () => {
+                    updateChart();
+                },
+                1000);
+        }
 
         function updateChart() {
-
-            fetch('http://192.168.1.46/a0')
+            var ip = getIp();
+            fetch('http://' + ip + '/a0')
                 .then(function (response) {
                     return response.json();
                 })
@@ -45,6 +62,21 @@
                         ]
                     });
                 });
+
+
+            // fetch('http://192.168.1.46/a0')
+            //     .then(function (response) {
+            //         return response.json();
+            //     })
+            //     .then(function (data) {
+            //         console.log(data);
+            //         A0s = A0s.concat(data.A0);
+            //         chart.load({
+            //             columns: [
+            //                 A0s,
+            //             ]
+            //         });
+            //     });
 
         }
 
@@ -90,7 +122,10 @@
     <input type="button" value="A0" onclick="callA0()">
     <input type="button" value="Update Chart" onclick="updateChart()">
     <input type="button" value="Dynamic Chart" onclick="autoChart()">
+    <input type="button" value="Start" onclick="onOffChart()" id='onOff'>
     <div id="chart"></div>
+
+    <input type="text" name="" id="ip" value="192.168.1.46">
 
 </body>
 
