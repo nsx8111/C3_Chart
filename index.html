@@ -19,6 +19,7 @@
     <script>
         var A0s;
         var chart;
+        const MAX_LEN = 100;
 
         function getIp() {
             return document.getElementById("ip").value;
@@ -55,7 +56,11 @@
                 })
                 .then(function (data) {
                     console.log(data);
-                    A0s = A0s.concat(data.A0);
+                    // A0s = A0s.concat(data.A0);
+                    A0s = A0s.concat(data);
+                    document.getElementById("A0_Value").innerText = data;
+                    A0s.splice(MAX_LEN, 1);
+
                     chart.load({
                         columns: [
                             A0s,
@@ -64,7 +69,7 @@
                 });
 
 
-            // fetch('http://192.168.1.46/a0')
+            // fetch('http://192.168.1./a0')
             //     .then(function (response) {
             //         return response.json();
             //     })
@@ -81,23 +86,30 @@
         }
 
         function callBlink() {
-
-            fetch('http://192.168.1.46/a0')
+            var ip = getIp();
+            fetch('http://' + ip + '/blink')
                 .then(function (response) {
                     console.log("ok");
                 });
 
-
         }
 
         function callA0() {
-            fetch('http://192.168.1.46/a0')
+            var ip = getIp();
+            fetch(ip)
+            //fetch('http://' + ip + '/a0')
                 .then(function (response) {
                     return response.json();
                 })
                 .then(function (myJson) {
                     console.log(myJson);
+                    // var myJson_A0 = myJson.A0;
+                    var myJsonObject = JSON.stringify(myJson);
+                    document.getElementById("A0_Value").innerText = myJsonObject;
+                    // document.getElementById("A0_Value").innerText = myJson_A0;
+
                 });
+
         }
 
         window.onload = () => {
@@ -114,6 +126,9 @@
         };
 
 
+
+
+
     </script>
 </head>
 
@@ -123,9 +138,12 @@
     <input type="button" value="Update Chart" onclick="updateChart()">
     <input type="button" value="Dynamic Chart" onclick="autoChart()">
     <input type="button" value="Start" onclick="onOffChart()" id='onOff'>
+    光敏電阻值 : <span id="A0_Value"></span>
+
     <div id="chart"></div>
 
-    <input type="text" name="" id="ip" value="192.168.1.46">
+    <!-- <input type="text" name="" id="ip" value="192.168.1.30"> -->
+    <input type="text" name="" id="ip" value="https://cloud.arest.io/YY0205/TEST">
 
 </body>
 
