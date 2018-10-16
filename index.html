@@ -50,15 +50,16 @@
 
         function updateChart() {
             var ip = getIp();
-            fetch('http://' + ip + '/a0')
+            fetch(ip)
+            // fetch('http://' + ip + '/a0')
                 .then(function (response) {
                     return response.json();
                 })
                 .then(function (data) {
-                    console.log(data);
-                    // A0s = A0s.concat(data.A0);
-                    A0s = A0s.concat(data);
-                    document.getElementById("A0_Value").innerText = data;
+                    console.log(data.variables.TEST);
+                    A0s = A0s.concat(data.variables.TEST);
+                    // A0s = A0s.concat(data);
+                    document.getElementById("A0_Value").innerText = data.variables.TEST;
                     A0s.splice(MAX_LEN, 1);
 
                     chart.load({
@@ -97,14 +98,15 @@
         function callA0() {
             var ip = getIp();
             fetch(ip)
-            //fetch('http://' + ip + '/a0')
+            // fetch('http://' + ip + '/a0')
                 .then(function (response) {
                     return response.json();
                 })
                 .then(function (myJson) {
-                    console.log(myJson);
+                    console.log(myJson.variables.TEST);
                     // var myJson_A0 = myJson.A0;
-                    var myJsonObject = JSON.stringify(myJson);
+                    // var myJsonObject = JSON.stringify(myJson);
+                    var myJsonObject = JSON.stringify(myJson.variables.TEST);
                     document.getElementById("A0_Value").innerText = myJsonObject;
                     // document.getElementById("A0_Value").innerText = myJson_A0;
 
@@ -126,9 +128,6 @@
         };
 
 
-
-
-
     </script>
 </head>
 
@@ -143,8 +142,10 @@
     <div id="chart"></div>
 
     <!-- <input type="text" name="" id="ip" value="192.168.1.30"> -->
-    <input type="text" name="" id="ip" value="https://cloud.arest.io/YY0205/TEST">
+    <input type="text" name="" id="ip" value="https://cloud.arest.io/YY0205">
 
 </body>
-
+<!-- sdata = document.body.innerText
+jdata = JSON.parse(sdata)
+jdata.TEST -->
 </html>
